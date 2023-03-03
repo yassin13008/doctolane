@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur Docto Lane
+{% endblock %}
+
+{% block body %}
+
+    <div class="container d-flex flex-column justify-content-around ">
+
+	<div class="">
+		<h1>Bienvenue sur Docto Lane! ✅</h1>
+
+		    <p>Ce site va vous permettre de prendre rendez vous avec des
+			    <strong class="text-danger">professionnels de la santé
+			    </strong>
+		    </p>
+		    <p>Nous avons une liste de spécialiste et d'expert non-exhaustive qui vous permettra de trouver le professionnel qui vous faut !</p>
+
+		    <p>Pour vous :
+			    <strong class="text-danger">professionnel de la santé
+			    </strong>
+		    </p>
+		    <p>Nous vous mettons à disposition un système de rendez-vous personnalisable</p>
+		    <p>Vous serez en mesure de :</p>
+	                </br>
+	                Contactez vos patients
+                    </br>
+                    Gérer vos disponibilité
+                    </br>
+                    Annuler ou modifier un rendez vous !
+            </p>
+            <p>Convaincu ?</p>
+        </div>
+        <div class="d-flex justify-content-around">
+            <a href="#" class="btn btn-success">Inscrivez vous en tant que particulier</a>
+            <a href="{{ path('inscriptionPDS')}}" class="btn btn-danger">Inscrivez vous en tant que professionnels de la santé</a>
+        </div>
+    </div>
+
+{% endblock %}
+
