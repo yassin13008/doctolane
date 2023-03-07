@@ -15,15 +15,15 @@ class Specialities
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
     private ?string $speciality_label = null;
 
-    #[ORM\OneToMany(mappedBy: 'Speciality', targetEntity: Doctors::class)]
-    private Collection $doctors;
+    #[ORM\OneToMany(mappedBy: 'speciality', targetEntity: Professionnals::class)]
+    private Collection $professionnals;
 
     public function __construct()
     {
-        $this->doctors = new ArrayCollection();
+        $this->professionnals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -44,29 +44,29 @@ class Specialities
     }
 
     /**
-     * @return Collection<int, Doctors>
+     * @return Collection<int, Professionals>
      */
-    public function getDoctors(): Collection
+    public function getProfessionals(): Collection
     {
-        return $this->doctors;
+        return $this->professionnals;
     }
 
-    public function addDoctor(Doctors $doctor): self
+    public function addProfessional(Professionnals $professional): self
     {
-        if (!$this->doctors->contains($doctor)) {
-            $this->doctors->add($doctor);
-            $doctor->setSpeciality($this);
+        if (!$this->professionnals->contains($professional)) {
+            $this->professionnals->add($professional);
+            $professional->setSpeciality($this);
         }
 
         return $this;
     }
 
-    public function removeDoctor(Doctors $doctor): self
+    public function removeProfessional(Professionnals $professional): self
     {
-        if ($this->doctors->removeElement($doctor)) {
+        if ($this->professionnals->removeElement($professional)) {
             // set the owning side to null (unless already changed)
-            if ($doctor->getSpeciality() === $this) {
-                $doctor->setSpeciality(null);
+            if ($professional->getSpeciality() === $this) {
+                $professional->setSpeciality(null);
             }
         }
 

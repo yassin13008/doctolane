@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Specialities as EntitySpecialities;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\Specialities;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class Specialities extends Fixture
+class SpecialitiesFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
@@ -147,16 +147,14 @@ class Specialities extends Fixture
 
         for ($i=0; $i < sizeof($spécialities) ; $i++) { 
 
-            $speciality = new EntitySpecialities();
+            $speciality = new Specialities();
 
             $speciality->setSpecialityLabel($spécialities[$i]);
             $manager->persist($speciality);
-
-            $manager->flush();
-            # code...
         }
-        // $product = new Product();
-        // $manager->persist($product);
+        
+        $manager->flush();
+    }
 
     }
-}
+

@@ -2,55 +2,74 @@
 
 namespace App\Controller;
 
-use App\Entity\Doctors;
-use App\Form\RegistrationFormType;
-use App\Repository\ExpertisesRepository;
-use App\Repository\SpecialitiesRepository;
-use App\Security\UsersAuthenticator;
+use App\Entity\Patients;
+use App\Entity\Professionnals;
+use App\Entity\User;
+use App\Form\PatientsRegistrationFormType;
+use App\Form\ProfessionnalsRegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/inscriptionPDS', name: 'inscriptionPDS')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager, SpecialitiesRepository $specialityRepository, ExpertisesRepository $expertisesRepository): Response
+    #[Route('/inscription', name: 'register')]
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $specialities = $specialityRepository->findAll();
-        $expertises = $expertisesRepository->findAll();
-        $user = new Doctors();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $userPatient = new Patients();
+        $form = $this->createForm(PatientsRegistrationFormType::class, $userPatient);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $user->setPassword(
+            $userPatient->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $user,
+                    $userPatient,
                     $form->get('plainPassword')->getData()
                 )
             );
 
-            $entityManager->persist($user);
+            $entityManager->persist($userPatient);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('registration/inscriptionPDS.html.twig', [
+        return $this->render('registration/inscription.html.twig', [
             'registrationForm' => $form->createView(),
-            'specialities' => $specialities,
-            'expertises' => $expertises
+        ]);
+    }
+
+    #[Route('/inscriptionPro', name: 'registerPro')]
+    public function registerProfessionnals(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $userProfessionnals = new Professionnals();
+        $form = $this->createForm(ProfessionnalsRegistrationFormType::class, $userProfessionnals);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $userProfessionnals->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $userProfessionnals,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager->persist($userProfessionnals);
+            $entityManager->flush();
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('registration/inscriptionPro.html.twig', [
+            'registrationForm' => $form->createView(),
         ]);
     }
 }
