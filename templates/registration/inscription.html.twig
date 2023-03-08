@@ -1,17 +1,23 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Register{% endblock %}
+{% block title %}
+Inscription
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    <h1>Inscrivez vous !</h1>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+    {{ form_start(form)}}
+
+{# Fait attention, les attributs que j'ai rejouté à mon formulaire sont inscript en JSON TYPE #}
+{# Je le l'ai pas fait sur le email et user name car deja fait sur le fichier RegistrationType pour pas engorger la page twig #}
+    {{form_row(form.username)}}
+    {{form_row(form.email)}}
+    {{form_row(form.password, {'label': 'Votre mot de passe', 'attr': {'placeholder' : 'Votre mot de passe'}})}}
+
+    {{ form_widget(form)}}
+<button class="btn btn-outline-success">Inscrivez vous !</button>
+    {{ form_end(form)}}
+
 {% endblock %}

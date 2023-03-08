@@ -5,9 +5,13 @@ namespace App\Entity;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PatientsRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: PatientsRepository::class)]
-class Patients extends User
+class Patients implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,10 +28,28 @@ class Patients extends User
     private ?string $adress = null;
 
     #[ORM\Column(length: 5)]
-    private ?string $postal = null;
+    private ?string $postal_code = null;
 
     #[ORM\Column(length: 13)]
     private ?string $phone_number = null;
+
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    // Ici j'ai mis les propriétés de l'entité User pour implémenter le user interface et le hashage du mdp
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'Votre mot de passe doit contenir au minimum {{ limit }} caractère',
+    )]
+    private ?string $password = null;
+    
 
     public function getId(): ?int
     {
@@ -70,14 +92,14 @@ class Patients extends User
         return $this;
     }
 
-    public function getPostal(): ?string
+    public function getPostalCode(): ?string
     {
-        return $this->postal;
+        return $this->postal_code;
     }
 
-    public function setPostal(string $postal): self
+    public function setPostalCode(string $postal_code): self
     {
-        $this->postal = $postal;
+        $this->postal_code = $postal_code;
 
         return $this;
     }
@@ -92,6 +114,73 @@ class Patients extends User
         $this->phone_number = $phone_number;
 
         return $this;
+    }
+
+    // Ici je met les fonctions, les guetteurs et les setters qui me permette d'implementer les interfaces necessaires d'users
+    
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
 }

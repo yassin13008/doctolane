@@ -5,6 +5,9 @@ namespace App\Repository;
 use App\Entity\Patients;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 /**
  * @extends ServiceEntityRepository<Patients>
@@ -14,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Patients[]    findAll()
  * @method Patients[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PatientsRepository extends ServiceEntityRepository
+class PatientsRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -37,6 +40,17 @@ class PatientsRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        if (!$user instanceof Patients) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+        }
+
+        $user->setPassword($newHashedPassword);
+
+        $this->save($user, true);
     }
 
 //    /**

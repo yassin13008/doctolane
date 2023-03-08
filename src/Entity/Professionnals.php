@@ -3,11 +3,18 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProfessionnalsRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+
 
 #[ORM\Entity(repositoryClass: ProfessionnalsRepository::class)]
-class Professionnals extends User
+class Professionnals implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -32,9 +39,29 @@ class Professionnals extends User
     #[ORM\Column(length: 13)]
     private ?string $phone_number = null;
 
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
+
     #[ORM\ManyToOne(inversedBy: 'professionnals')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Specialities $speciality = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'Votre mot de passe doit contenir au minimum {{ limit }} caractère',
+    )]
+    private ?string $password = null;
+    
+    #[Assert\EqualTo(propertyPath: "password",  message: "Vos mot de passe ne sont pas les mêmes !!!" )]
+    public ?string $confirm_password = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $Expertises = null;
+
 
     public function getId(): ?int
     {
@@ -125,6 +152,66 @@ class Professionnals extends User
     public function setSpeciality(?Specialities $speciality): self
     {
         $this->speciality = $speciality;
+
+        return $this;
+    }
+
+    
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+    
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getExpertises(): ?string
+    {
+        return $this->Expertises;
+    }
+
+    public function setExpertises(string $Expertises): self
+    {
+        $this->Expertises = $Expertises;
 
         return $this;
     }

@@ -5,6 +5,9 @@ namespace App\Repository;
 use App\Entity\Professionnals;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 /**
  * @extends ServiceEntityRepository<Professionals>
@@ -14,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Professionals[]    findAll()
  * @method Professionals[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProfessionnalsRepository extends ServiceEntityRepository
+class ProfessionnalsRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -37,6 +40,16 @@ class ProfessionnalsRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        if (!$user instanceof Professionnals) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+        }
+
+        $user->setPassword($newHashedPassword);
+
+        $this->save($user, true);
     }
 
 //    /**
