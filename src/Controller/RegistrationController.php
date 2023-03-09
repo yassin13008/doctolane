@@ -41,7 +41,7 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
 
             
-
+            $this->addFlash('success', 'Profil enregistré, vous pouvez désormais vous connecter');
             return $this->redirectToRoute('app_login');
         }
 
@@ -70,6 +70,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
+            $this->addFlash('success', 'Profil enregistré, vous pouvez désormais vous connecter');
             return $this->redirectToRoute('app_login');
         }
 

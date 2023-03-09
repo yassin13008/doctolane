@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre profil {% endblock %}
+
+{% block body %}
+
+<div class="card d-flex flex-column justify-content-around container " style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Votre nom : {{ app.user.lastname}}</p>
+    <p class="card-text">Votre Prenom : {{ app.user.firstname}} </p>
+    <p class="card-text">Votre Adresse : {{ app.user.adress}}</p>
+    <p class="card-text">Votre Code Postal : {{ app.user.postalCode}} </p>
+    <p class="card-text">Votre Ville : {{ app.user.city}} </p>
+    <p class="card-text">Votre numéro de téléphone : {{ app.user.phoneNumber}} </p>
+    <p class="card-text">Votre spécialité  : {{ speciality }} </p>
+    <p class="card-text">Details du domaine d'expertise : {{ app.user.expertises}} </p>
+    <a href=" {{path('editProfileProfessionnal')}}" class="btn btn-outline-warning">Modifier votre profil !</a>
+    <a href=" {{ path('editProfessionnalPassword')}}" class="btn btn-outline-danger">Modifier votre mot de passe !</a>
+    <a href=" {{ path('home')}}" class="btn btn-outline-primary ">Retour sur la page d'acceuil </a>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -22,10 +22,13 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
     private ?int $id = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = ['ROLE_DOCTOR'];
 
     #[ORM\Column(length: 255)]
     private ?string $Username = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
@@ -33,8 +36,9 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
     #[ORM\Column(length: 255)]
     private ?string $adress = null;
 
+
     #[ORM\Column(length: 255)]
-    private ?string $postal_code = null;
+    private ?string $city = null;
 
     #[ORM\Column(length: 13)]
     private ?string $phone_number = null;
@@ -61,6 +65,9 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $Expertises = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $postalCode = null;
 
 
     public function getId(): ?int
@@ -96,6 +103,26 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
         return $this;
     }
 
+        /**
+     * Get the value of lastname
+     */ 
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set the value of lastname
+     *
+     * @return  self
+     */ 
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -120,14 +147,23 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
         return $this;
     }
 
-    public function getPostalCode(): ?string
+
+        /**
+     * Get the value of city
+     */ 
+    public function getCity()
     {
-        return $this->postal_code;
+        return $this->city;
     }
 
-    public function setPostalCode(string $postal_code): self
+    /**
+     * Set the value of city
+     *
+     * @return  self
+     */ 
+    public function setCity($city)
     {
-        $this->postal_code = $postal_code;
+        $this->city = $city;
 
         return $this;
     }
@@ -215,4 +251,18 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
 
         return $this;
     }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+
 }

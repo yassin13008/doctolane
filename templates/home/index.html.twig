@@ -5,6 +5,9 @@
 
 {% block body %}
 
+{% if not app.user %}
+
+
     <div class="container d-flex flex-column justify-content-around ">
 
 	<div class="">
@@ -36,6 +39,38 @@
             <a href="{{ path('registerPro')}}" class="btn btn-danger">Inscrivez vous en tant que professionnels de la santé</a>
         </div>
     </div>
+
+{% elseif app.user and is_granted('ROLE_USER') %}
+
+	<div class="container d-flex flex-column justify-content-around ">
+		<div class="">
+		<h1>Bienvenue sur Docto Lane! Cher patient !!! ✅</h1>
+
+		    <p>Ce site va vous permettre de prendre rendez vous avec des
+			    <strong class="text-danger">professionnels de la santé
+			    </strong>
+		    </p>
+		    <p>Nous avons une liste de spécialiste et d'expert non-exhaustive qui vous permettra de trouver le professionnel qui vous faut !</p>
+
+		    <p>Une barre de recherche est mis en place pour que vous cherchez le spécialiste qu'il vous faut selon les professionnels enregistrés sur notre site </p>
+			<p>Vous pouvez aussi modifier votre profils </p>
+			<a href="{{ path('profilePatient')}}" class="btn btn-outline-secondary">Accedez à votre profil !</a>
+        </div>
+	</div>
+
+{% elseif app.user and is_granted('ROLE_DOCTOR') %}
+
+	<div class="container d-flex flex-column justify-content-around ">
+		<div class="">
+		<h1>Bienvenue sur Docto Lane! Cher professionnel !!! ✅</h1>
+
+		    <p>Ce site va vous permettre de gérer les patients qui souhaite prendre rendez-vous avec vous mais aussi de les contacter en cas de besoin 
+		    </p>
+			<p>Vous pouvez aussi modifier votre profils </p>
+			<a href="{{ path('profileProfessionnal')}}" class="btn btn-outline-secondary">Accedez à votre profil !</a>
+        </div>
+	</div>
+{% endif %}
 
 {% endblock %}
 

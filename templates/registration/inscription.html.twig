@@ -6,12 +6,20 @@ Inscription
 
 {% block body %}
 
+<div class="container d-flex flex-column col-4 mt-4">
+
     <h1>Inscrivez vous !</h1>
 
     {{ form_start(form)}}
 
 {# Fait attention, les attributs que j'ai rejouté à mon formulaire sont inscript en JSON TYPE #}
 {# Je le l'ai pas fait sur le email et user name car deja fait sur le fichier RegistrationType pour pas engorger la page twig #}
+    {{form_row(form.lastname)}}
+    {{form_row(form.firstname)}}
+    {{form_row(form.adress)}}
+    {{form_row(form.postalCode)}}
+    {{form_row(form.phoneNumber)}}
+    {{form_row(form.city)}}
     {{form_row(form.username)}}
     {{form_row(form.email)}}
     {{form_row(form.password, {'label': 'Votre mot de passe', 'attr': {'placeholder' : 'Votre mot de passe'}})}}
@@ -19,5 +27,7 @@ Inscription
     {{ form_widget(form)}}
 <button class="btn btn-outline-success">Inscrivez vous !</button>
     {{ form_end(form)}}
+
+</div>
 
 {% endblock %}

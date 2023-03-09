@@ -29,6 +29,13 @@ class ProfessionnalsRegistrationFormType extends AbstractType
             ],
             'label' => 'Votre nom d\'utilisateur'
         ])
+        ->add('lastname', TextType::class, [
+            'attr' => [
+                'placeholder' => 'Votre nom',
+                'class' => 'form-control'
+            ],
+            'label' => 'Votre nom'
+        ])
         ->add('firstname', TextType::class, [
             'attr' => [
                 'placeholder' => 'Votre prenom',
@@ -43,12 +50,19 @@ class ProfessionnalsRegistrationFormType extends AbstractType
             ],
             'label' => 'Votre adresse'
         ])
-        ->add('postal_code', TextType::class, [
+        ->add('postalCode', TextType::class, [
             'attr' => [
                 'placeholder' => 'Votre code postal',
                 'class' => 'form-control'
             ],
             'label' => 'Votre code postal'
+        ])
+        ->add('city', TextType::class, [
+            'attr' => [
+                'placeholder' => 'Votre ville',
+                'class' => 'form-control'
+            ],
+            'label' => 'Votre ville'
         ])
         ->add('phoneNumber', TextType::class, [
             'attr' => [

@@ -22,13 +22,18 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $UserName = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $lastname = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     private ?string $adress = null;
 
-    #[ORM\Column(length: 5)]
-    private ?string $postal_code = null;
+
+
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
 
     #[ORM\Column(length: 13)]
     private ?string $phone_number = null;
@@ -37,7 +42,7 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = ['ROLE_USER'];
 
     // Ici j'ai mis les propriétés de l'entité User pour implémenter le user interface et le hashage du mdp
     /**
@@ -49,6 +54,9 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
         minMessage: 'Votre mot de passe doit contenir au minimum {{ limit }} caractère',
     )]
     private ?string $password = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $postalCode = null;
     
 
     public function getId(): ?int
@@ -64,6 +72,26 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserName(string $UserName): self
     {
         $this->UserName = $UserName;
+
+        return $this;
+    }
+
+        /**
+     * Get the value of lastname
+     */ 
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set the value of lastname
+     *
+     * @return  self
+     */ 
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -92,14 +120,23 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPostalCode(): ?string
+
+        /**
+     * Get the value of city
+     */ 
+    public function getCity()
     {
-        return $this->postal_code;
+        return $this->city;
     }
 
-    public function setPostalCode(string $postal_code): self
+    /**
+     * Set the value of city
+     *
+     * @return  self
+     */ 
+    public function setCity($city)
     {
-        $this->postal_code = $postal_code;
+        $this->city = $city;
 
         return $this;
     }
@@ -182,5 +219,19 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+
 
 }
