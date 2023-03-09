@@ -17,6 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+
+// section Class d'enregistrement des utilisateurs Professionnals !! 
+
 class ProfessionnalsRegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options, ): void

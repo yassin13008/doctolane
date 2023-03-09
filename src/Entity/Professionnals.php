@@ -12,6 +12,14 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
+// Voici l'entité patient, ATTENTION, elle est au pluriel ici car pour moi c'est la class qui contient les données des utilisateurs PATIENT
+// C'est la même choses pour les Professionnels de santé si ce n'est quelques champs
+// Les deux ont la class UserInterface et PasswordAuthen.. qui me permet de les faires connecter mais aussi les enregistrer en tant qu'utilisateur pour symfony
+
+// ATTENTION VOIR SECURITY YAML POUR COMPRENDRE QUELS CLASS SONT CONSIDERER COMME UTILISATEUR 
+// POUR CREER UN AUTRE TYPE DUTILISATEUR, CREER SA CLASSE IMPLEMENTER LES CLASSE USERINTERFACE ET PASSWORD AUTHENTICA
+// METTRE LA CLASSE PASSWORD AUTHENTICAT SUR LE REPOSITORY DE LA CLASSE (UTILISATEUR) QUE VOUS AVEZ CREER ET ALLEZ LE RAJOUTER COMME SUIS SUR SECURITY YAML
+
 
 #[ORM\Entity(repositoryClass: ProfessionnalsRepository::class)]
 class Professionnals implements UserInterface, PasswordAuthenticatedUserInterface

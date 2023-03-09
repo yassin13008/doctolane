@@ -12,6 +12,8 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+    
+    // Condition pour vérifier si l'utilisateur est déja connecté !!!
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
@@ -24,6 +26,9 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
+    // Route de déconnexion 
+    
+    
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {

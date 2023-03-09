@@ -14,6 +14,14 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+// ATTENTION ICI IL N Y A PAS LE CHAMPS MDP, CE FORMULAIRE EST DESTINEE A SEULEMENT LA MODIF DU PROFIL UTILISATEUR PATIENT
+// POUR CHANGER LE MOT DE PASSE UN FORMULAIRE MANUELLE A ETE CREE UNIQUEMENT POUR CA PAR SECURITE
+
+// CELA VAUT AUSSI POUR LE EDIT PROFESSIONNAL FORM TYPE 
+
+// section Class d'enregistrement des utilisateurs patients !! 
+
+
 class EditPatientFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -13,9 +13,15 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+
+// ATTENTION ICI IL N Y A PAS LE CHAMPS MDP, CE FORMULAIRE EST DESTINEE A SEULEMENT LA MODIF DU PROFIL UTILISATEUR PROFESSIONNAL
+// POUR CHANGER LE MOT DE PASSE UN FORMULAIRE MANUELLE (SANS SYMFONY)A ETE CREE UNIQUEMENT POUR CA PAR SECURITE
+// ALLER SUR LE TEMPLACE PROFILE/EDIT PASSWORD 
+
+// CELA VAUT AUSSI POUR LE EDIT PATIENT FORM TYPE 
+
+// section Class d'enregistrement des utilisateurs patients !! 
 
 class EditProfessionnalFormType extends AbstractType
 {
