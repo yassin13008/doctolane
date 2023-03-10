@@ -66,6 +66,11 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 5)]
     private ?string $postalCode = null;
+
+
+    // ATTENTION CETTE COLUMN SERT A LA RE INITIALISATION DE MDP, Y TOUCHER AVEC LE PLUS GRAND SOIN !!!
+    #[ORM\Column(type: 'string', length: 255, nullable:true)]
+    private $resetToken = null;
     
 
     public function getId(): ?int
@@ -243,4 +248,24 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
+
+    /**
+     * Get the value of resetToken
+     */ 
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * Set the value of resetToken
+     *
+     * @return  self
+     */ 
+    public function setResetToken($resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
 }

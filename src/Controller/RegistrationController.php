@@ -54,7 +54,7 @@ class RegistrationController extends AbstractController
             // Message en cas de success et redirection sur la page login 
             // Je n'ai pas mis la connexion automatique pour laisser le champ à la possibilité d'envoyé un mail de confirmation 
             $this->addFlash('success', 'Profil enregistré, vous pouvez désormais vous connecter');
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('connexion');
         }
 
         return $this->render('registration/inscription.html.twig', [
@@ -84,7 +84,7 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
 
             $this->addFlash('success', 'Profil enregistré, vous pouvez désormais vous connecter');
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('connexion');
         }
 
         return $this->render('registration/inscriptionPro.html.twig', [

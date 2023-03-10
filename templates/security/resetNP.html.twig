@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Nouveau mot de passe{% endblock %}
+
+{% block body %}
+
+
+        <section class="container my-3">
+        <div class="row">
+            <div class="col">
+
+    <h1>Intialisation du nouveau mot de passe !!!!</h1>
+    <p>Bonjours Mr {{ user.firstname}} {{ user.lastname}}</p>
+    <p>Voici le formulaire pour votre mot de passe </p>
+                {{ form_start(formPass)}}
+
+
+                {{ form_widget(formPass)}}
+        <button class="btn btn-outline-success mt-2" type="submit">Envoyez !! </button>
+                {{ form_end(formPass)}}
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
