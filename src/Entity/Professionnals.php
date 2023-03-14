@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProfessionnalsRepository;
@@ -78,9 +80,16 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
     private ?string $postalCode = null;
 
     // ATTENTION CETTE COLUMN SERT A LA RE INITIALISATION DE MDP, Y TOUCHER AVEC LE PLUS GRAND SOIN !!!
-    #[ORM\Column(type: 'string', length: 255)]
-    private $resetToken;
-    
+    #[ORM\Column(type: 'string', length: 255, nullable:true)]
+    private ?string $resetToken = null;
+
+    #[ORM\ManyToMany(targetEntity: Appointment::class, mappedBy: 'professionnal')]
+    private Collection $appointments;
+
+    public function __construct()
+    {
+        $this->appointments = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -296,6 +305,34 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Appointment>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): self
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->addProfessionnal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): self
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            $appointment->removeProfessionnal($this);
+        }
+
+        return $this;
+    }
+
 
 
 }

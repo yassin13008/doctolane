@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PatientsRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -71,6 +73,17 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
     // ATTENTION CETTE COLUMN SERT A LA RE INITIALISATION DE MDP, Y TOUCHER AVEC LE PLUS GRAND SOIN !!!
     #[ORM\Column(type: 'string', length: 255, nullable:true)]
     private $resetToken = null;
+
+    #[ORM\ManyToMany(targetEntity: Appointment::class, mappedBy: 'patient')]
+    private Collection $appointments;
+
+
+   
+
+    public function __construct()
+    {
+        $this->appointments = new ArrayCollection();
+    }
     
 
     public function getId(): ?int
@@ -268,4 +281,34 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Appointment>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): self
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->addPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): self
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            $appointment->removePatient($this);
+        }
+
+        return $this;
+    }
+
+    
+
 }
