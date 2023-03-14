@@ -22,13 +22,16 @@ class AppointmentController extends AbstractController
 
         $user = $this->getUser();
 
-        dd($user->getAppointments()->toArray());
+        // dd($user->getAppointments()->toArray());
 
 
         return $this->render('appointment/index.html.twig', [
-            'appointments' => $appointmentRepository->find($user),
+            'appointments' => $user->getAppointments()->toArray() ,
         ]);
     }
+
+    // $appointmentRepository->find($user->getAppointments()->toArray()
+
 
     #[Route('/new/{id}', name: 'newAppointment', methods: ['GET', 'POST'])]
     public function new($id, Request $request, AppointmentRepository $appointmentRepository, PatientsRepository $patientRepo, ProfessionnalsRepository $proRepo, EntityManagerInterface $manager): Response
