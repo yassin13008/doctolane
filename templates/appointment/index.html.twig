@@ -20,8 +20,8 @@
             <tr>
                 <td>{{ appointment.id }}</td>
                 <td>{{ appointment.Title }}</td>
-                <td>{{ appointment.start ? appointment.start|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ appointment.end ? appointment.end|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ appointment.start ? appointment.start|date('Y-m-d H:i:', 'Europe/Paris') : '' }}</td>
+                <td>{{ appointment.end ? appointment.end|date('Y-m-d H:i:', 'Europe/Paris') : '' }}</td>
                 <td>
                     <a href="{{ path('app_appointment_show', {'id': appointment.id}) }}">show</a>
                     <a href="{{ path('app_appointment_edit', {'id': appointment.id}) }}">edit</a>

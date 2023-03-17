@@ -2,16 +2,19 @@
 
 namespace App\Controller;
 
+use DateTime;
+use DateTimeZone;
 use App\Entity\Appointment;
 use App\Form\AppointmentType;
-use App\Repository\AppointmentRepository;
 use App\Repository\PatientsRepository;
-use App\Repository\ProfessionnalsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\AppointmentRepository;
+use App\Repository\ProfessionnalsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('professionnal/appointment')]
 class AppointmentController extends AbstractController
@@ -36,33 +39,111 @@ class AppointmentController extends AbstractController
     #[Route('/new/{id}', name: 'newAppointment', methods: ['GET', 'POST'])]
     public function new($id, Request $request, AppointmentRepository $appointmentRepository, PatientsRepository $patientRepo, ProfessionnalsRepository $proRepo, EntityManagerInterface $manager): Response
     {
+        // Récupération du calendrier et transformation des disponibilités du professionnel de santé 
+        // On récupère tous les rendez-vous correspondant au professionnels de santé
+        $calendarDoctorEvents = $appointmentRepository->findAll($id);
+
+        //Je vais initialisé une variable a null en cas ou aucun rendez vous n'a été pris avec cette personne
+        $rdvs = [];
+
+        // Ici, je vais mettre les données que j'ai récupérer dans un tableau => cela va me servir à parser ses données en JSON pour les afficher avec Fullcalendar
+        foreach ($calendarDoctorEvents as $calendarDoctorEvent) {
+            # code...
+            
+
+            $rdvs[]= [
+                'id' => $calendarDoctorEvent->getId(),
+                'start' => $calendarDoctorEvent->getStart()->format('Y-m-d H:i'),
+                'end' => $calendarDoctorEvent->getEnd()->format('Y-m-d H:i'),
+            ];
+
+        }
+
+
+        // Maintenant que j'ai rentrés les rendez vous dans un tableau, je vais parser les données en JSON
+        $data = json_encode($rdvs);
+
+        //FIN DE LA PREMIERE PARTIE 
+        //DEBUT DE LA DEUXIEME PARTIE 
+
+        // ici je vais crée un nouveau rendez vous 
+
         $appointment = new Appointment();
+
+        // Ici je vais récupérer l'id qui correspont au professionnel de santé inscrit sur le site 
+        // Je récupère par la même occassion les données de l'utilisateur pour l'enregistrer dans la table Appointment 
+
 
         $proId = $id;
         $patientId = $this->getUser()->getId();
 
+        // Je récupère l'objet' des professionnels et des patients grace à l'id récupérer au préalable 
         $pro = $proRepo->find($proId);
         $patient = $patientRepo->find($patientId);
+        
 
+
+
+        // Je créer le formulaire à la class AppointType form 
         $form = $this->createForm(AppointmentType::class, $appointment);
+
+        // Apres je prépare la request 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
         
-        // $appointment->setProfessionnal($pro);
-        $appointment->addPatient($patient);
-        $appointment->addProfessionnal($pro);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        $manager->persist($appointment);
-        $manager->flush();
+            $today = new DateTime(); // Je récupère ici la date du jour
+            $timeZone = new DateTimeZone('Europe/Paris'); // <je récupère le timezone Europe
+            $heureFrançaise = $today->setTimezone($timeZone);
+
+            $debut = $form->getData()->getStart()->setTimeZone($timeZone); // Heure de début du rendez vous 
+            $fin =  $form->getData()->getEnd()->setTimeZone($timeZone);// Heure de fin du rendez vous
+            //Maintenant, je vais comparer les dates necessaires
+            $diff = $debut->diff($fin);
+            for ($i=0; $i < sizeof($calendarDoctorEvents) ; $i++) { 
+                if($calendarDoctorEvents[$i]->getStart() == $debut){
+
+                    // dump($calendarDoctorEvents[$i]->getStart());
+                    // dd($debut);
+                    $this->addFlash('danger', 'Un rendez vous à été pris à cette date ');
+                    return $this->redirectToRoute('newAppointment',['id' => $id]);
+                }
+                if($calendarDoctorEvents[$i]->getStart() < $debut && $debut < $calendarDoctorEvents[$i]->getEnd()){
+
+                    $this->addFlash('danger', 'Vous ne pouvez pas prendre de rendez vous 30 min après un rendez vous ');
+                    return $this->redirectToRoute('newAppointment',['id' => $id]);
+                }
+            }
+            // Si la date du début du rdv est inferieur à la date actuelle
+            if($debut < $today ){
+                $this->addFlash('danger', 'Votre rendez vous doit être dans le futur');
+                return $this->redirectToRoute('newAppointment',['id' => $id]);
+            }
+            // Si la date du début est supérieur à la date de fin
+            if($debut > $fin ){
+                $this->addFlash('danger', 'Vous ne pouvez pas avoir une date de début superieur à la date de fin ');
+                return $this->redirectToRoute('newAppointment',['id' => $id]);
+            }
+            if($diff->h > 1 || $diff->h == 1 && $diff->i > 0){
+                $this->addFlash('danger', 'Votre rendez vous ne peux dépasser plus d\'une heure ');
+                return $this->redirectToRoute('newAppointment',['id' => $id]);
+            }
+            // Et la je vais controller si la personne essaye de prendre un rendez vous sur un créneau déja valide 
+
+        // Et la on fait persister les donnée et on les insère dans la base de donnée 
+            $manager->persist($appointment);
+            $manager->flush();
 
             $this->addFlash('success', 'Votre rendez vous à été enregistrer');
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
+
         return $this->renderForm('appointment/new.html.twig', [
             'appointment' => $appointment,
             'form' => $form,
+            'data'=> $data
         ]);
     }
 

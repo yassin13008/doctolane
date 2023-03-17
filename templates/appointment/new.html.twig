@@ -1,11 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Appointment{% endblock %}
+{% block title %}Nouveau rendez vous{% endblock %}
+
+{% block stylesheets %}
+<style>
+    #calendrier {
+        width: 50%;
+        margin: auto;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Appointment</h1>
+<div class="container d-flex flex-column">
+
+<h1 class="text-center">Les disponibilités </h1>
+<p class="text-center">Le calendrier en dessous vous montres les disponibilités de votre professionnel de santé</p>
+<p class="text-center">Vous pouvez ainsi prendre rendez vous selon ses disponibilités </p>
+<p class="text-center text-primary">Les cases remplit indiquent un créneau déja remplit !!! </p>
+
+<div id="calendrier"></div>
+
+<div class="container d-flex flex-column col-6 mt-4">
+    <h2>Prenez donc rendez-vous </h1>
 
     {{ include('appointment/_form.html.twig') }}
 
-    <a href="{{ path('app_appointment_index') }}">back to list</a>
+    <a class="btn btn-warning col-4" href="{{ path('app_professionnal_list') }}">Retours à la liste des docteurs ! </a>
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    window.onload = ()=> {
+        let calendarElt = document.querySelector('#calendrier');
+
+        let calendar = new FullCalendar.Calendar(calendarElt, {
+            initialView: 'timeGridWeek',
+            locale: 'fr',
+            timeZone : 'Europe/Paris',
+            headerToolbar: {
+                start: 'prev, next today',
+                center: 'title',
+                end: 'dayGridMonth, timeGridWeek'
+            },
+            events: {{ data|raw}}
+        })
+
+        calendar.render();
+    }
+</script>
 {% endblock %}
