@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Appointment;
+use App\Entity\Professionnals;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
@@ -40,6 +41,16 @@ class AppointmentRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByProfessionalId($professionalId)
+    {
+        $qb = $this->createQueryBuilder('app'); // Ici je crée la requête avec l'alias app (raccourci appointment ) pour dire que c'est la table appointment
+        $qb->select('app') // ici du coup je selection ma table appointment (ne pas oublié que l'on app nommé a)
+           ->leftJoin('app.professionnal', 'pro') // ici je vais joins l'id au professionnel id de ma table professionnal que je vais dénommé pro (avec l'alias )
+           ->where('pro.id = :professionalId') // Ici la condition de ma jointure se fait lorsque l'id de ma table pro = l'id de la table professionnal
+           ->setParameter('professionalId', $professionalId); // Ici j'insère la valeur qui lui correspondra et lors de l'appel de ma fonction je mettrai l'id en param de la fct
+    
+        return $qb->getQuery()->getResult(); // je recupère la requete et j'affiche le résultat
+    }
 //    /**
 //     * @return Appointment[] Returns an array of Appointment objects
 //     */
@@ -54,16 +65,24 @@ class AppointmentRepository extends ServiceEntityRepository
 //            ->getResult()
 //        ;
 //    }
+// public function getAppointmentsByProfessionalId($professionalId)
+// {
+//     return $this->createQueryBuilder('appointment')
+//         ->andWhere('id = :id')
+//         ->setParameter('id', $professionalId)
+//         ->getQuery()
+//         ->getResult();
+// }
 
-    // public function findByProfessionnalAppointment($id,): array {
+    // public function findByProfessionnalId($id,): array {
 
-    //         return $this->createQueryBuilder('a')
-    //        ->andWhere('a.exampleField = :val')
-    //        ->setParameter('val', $value)
-    //        ->orderBy('a.id', 'ASC')
-    //        ->setMaxResults(10)
-    //        ->getQuery()
-    //        ->getResult()
+    //         return $this->createQueryBuilder('p')
+    //         ->select('p')
+    //         ->from
+    //         ->where('p.id = p:id')
+    //         ->setParameter('p.id', $id)
+    //         ->getQuery()
+    //         ->getResult();
     //    ;
     // }
 
