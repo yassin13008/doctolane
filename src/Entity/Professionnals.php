@@ -78,8 +78,8 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
     private ?string $postalCode = null;
 
     // ATTENTION CETTE COLUMN SERT A LA RE INITIALISATION DE MDP, Y TOUCHER AVEC LE PLUS GRAND SOIN !!!
-    #[ORM\Column(type: 'string', length: 255)]
-    private $resetToken;
+    #[ORM\Column(type: 'string', length: 255, nullable:true)]
+    private ?string $resetToken = null;
     
 
 

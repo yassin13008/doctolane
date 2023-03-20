@@ -5,72 +5,82 @@
 
 {% block body %}
 
-{% if not app.user %}
+	{% if not app.user %}
 
 
-    <div class="container d-flex flex-column justify-content-around ">
+		<div class="container d-flex flex-column justify-content-around ">
 
-	<div class="">
-		<h1>Bienvenue sur Docto Lane! ✅</h1>
+			<div class="">
+				<h1>Bienvenue sur Docto Lane! ✅</h1>
 
-		    <p>Ce site va vous permettre de prendre rendez vous avec des
-			    <strong class="text-danger">professionnels de la santé
-			    </strong>
-		    </p>
-		    <p>Nous avons une liste de spécialiste et d'expert non-exhaustive qui vous permettra de trouver le professionnel qui vous faut !</p>
+				<p>Ce site va vous permettre de prendre rendez vous avec des
+					<strong class="text-danger">professionnels de la santé
+					</strong>
+				</p>
+				<p>Nous avons une liste de spécialiste et d'expert non-exhaustive qui vous permettra de trouver le professionnel qui vous faut !</p>
 
-		    <p>Pour vous :
-			    <strong class="text-danger">professionnel de la santé
-			    </strong>
-		    </p>
-		    <p>Nous vous mettons à disposition un système de rendez-vous personnalisable</p>
-		    <p>Vous serez en mesure de :</p>
-	                </br>
-	                Contactez vos patients
-                    </br>
-                    Gérer vos disponibilité
-                    </br>
-                    Annuler ou modifier un rendez vous !
-            </p>
-            <p>Convaincu ?</p>
-        </div>
-        <div class="d-flex justify-content-around">
-            <a href=" {{path('register')}}" class="btn btn-success">Inscrivez vous en tant que particulier</a>
-            <a href="{{ path('registerPro')}}" class="btn btn-danger">Inscrivez vous en tant que professionnels de la santé</a>
-        </div>
-    </div>
+				<p>Pour vous :
+					<strong class="text-danger">professionnel de la santé
+					</strong>
+				</p>
+				<p>Nous vous mettons à disposition un système de rendez-vous personnalisable</p>
+				<p>Vous serez en mesure de :</p>
+			</br>
+			Contactez vos patients
+		</br>
+		Gérer vos disponibilité
+	</br>
+	Annuler ou modifier un rendez vous !
+</p>
+<p>Convaincu ?</p></div><div class="d-flex justify-content-around">
+<a href=" {{path('register')}}" class="btn btn-success">Inscrivez vous en tant que particulier</a>
+<a href="{{ path('registerPro')}}" class="btn btn-danger">Inscrivez vous en tant que professionnels de la santé</a></div></div>{% elseif app.user and is_granted('ROLE_USER') %}<div class="container d-flex flex-column justify-content-around "><div class="">
+<h1>Bienvenue sur Docto Lane! Cher patient !!! ✅</h1>
 
-{% elseif app.user and is_granted('ROLE_USER') %}
+<p>Ce site va vous permettre de prendre rendez vous avec des
+	<strong class="text-danger">professionnels de la santé
+	</strong>
+</p>
+<p>Nous avons une liste de spécialiste et d'expert non-exhaustive qui vous permettra de trouver le professionnel qui vous faut !</p>
 
-	<div class="container d-flex flex-column justify-content-around ">
-		<div class="">
-		<h1>Bienvenue sur Docto Lane! Cher patient !!! ✅</h1>
-
-		    <p>Ce site va vous permettre de prendre rendez vous avec des
-			    <strong class="text-danger">professionnels de la santé
-			    </strong>
-		    </p>
-		    <p>Nous avons une liste de spécialiste et d'expert non-exhaustive qui vous permettra de trouver le professionnel qui vous faut !</p>
-
-		    <p>Une barre de recherche est mis en place pour que vous cherchez le spécialiste qu'il vous faut selon les professionnels enregistrés sur notre site </p>
-			<p>Vous pouvez aussi modifier votre profils </p>
-			<a href="{{ path('profilePatient')}}" class="btn btn-outline-secondary">Accedez à votre profil !</a>
-        </div>
+<p>Une barre de recherche est mis en place pour que vous cherchez le spécialiste qu'il vous faut selon les professionnels enregistrés sur notre site
+</p>
+<p>Vous pouvez aussi modifier votre profils
+</p>
+<a href="{{ path('profilePatient')}}" class="btn btn-outline-secondary">Accedez à votre profil !</a>
+<div class="toolBox">
+	<div class="form">
+		<h1 class="custom-text">
+			Rechercher un praticien :
+		</h1>
+		<br/>
+		{{form_start(form)}}
+		{{form_label(form.lastname)}}
+		<br/>
+		{{form_widget(form.lastname)}}
+		<br/>
+		{{form_label(form.adress)}}
+		<br/>
+		{{form_widget(form.adress)}}
+		<br/>
+		{{form_label(form.city)}}
+		<br/>
+		{{form_widget(form.city)}}
+		<br/>
+		{{form_label(form.speciality)}}
+		<br/>
+		{{form_widget(form.speciality)}}
+		<br/>
+		{{form_widget(form.search)}}
+		{{form_end(form)}}
 	</div>
 
-{% elseif app.user and is_granted('ROLE_DOCTOR') %}
+</div></div></div>{% elseif app.user and is_granted('ROLE_DOCTOR') %}<div class="container d-flex flex-column justify-content-around "><div class="">
+<h1>Bienvenue sur Docto Lane! Cher professionnel !!! ✅</h1>
 
-	<div class="container d-flex flex-column justify-content-around ">
-		<div class="">
-		<h1>Bienvenue sur Docto Lane! Cher professionnel !!! ✅</h1>
-
-		    <p>Ce site va vous permettre de gérer les patients qui souhaite prendre rendez-vous avec vous mais aussi de les contacter en cas de besoin 
-		    </p>
-			<p>Vous pouvez aussi modifier votre profils </p>
-			<a href="{{ path('profileProfessionnal')}}" class="btn btn-outline-secondary">Accedez à votre profil !</a>
-        </div>
-	</div>
-{% endif %}
-
-{% endblock %}
+<p>Ce site va vous permettre de gérer les patients qui souhaite prendre rendez-vous avec vous mais aussi de les contacter en cas de besoin
+</p>
+<p>Vous pouvez aussi modifier votre profils
+</p>
+<a href="{{ path('profileProfessionnal')}}" class="btn btn-outline-secondary">Accedez à votre profil !</a></div></div>{% endif %}{% endblock %}
 
