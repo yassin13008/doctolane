@@ -1,30 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Appointment index{% endblock %}
+{% block title %}La liste de vous rendez-vous {% endblock %}
 
 {% block body %}
-    <h1>Appointment index</h1>
+
+<div class="calendrier"></div>
+
+<div class="container">
+    <h1>Vos rendez vous</h1>
+    <p>Vous retrouvez ici la liste des patients qui souhaite vous voir. </p>
+    <p>Vous vous pouvez à tous moments voir le détais du patient, modifier ou supprimer le rendez vous en question. </p>
 
     <table class="table">
-        <thead>
+        <thead class="bg-info">
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>actions</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prenom</th>
+                <th scope="col">Title</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">actions</th>
             </tr>
         </thead>
         <tbody>
+
+
         {% for appointment in appointments %}
             <tr>
-                <td>{{ appointment.id }}</td>
+                <td>{{ appointment.patient.first().lastname }}</td>
+                <td>{{ appointment.patient.first().firstname }}</td>
                 <td>{{ appointment.Title }}</td>
-                <td>{{ appointment.start ? appointment.start|date('Y-m-d H:i:', 'Europe/Paris') : '' }}</td>
-                <td>{{ appointment.end ? appointment.end|date('Y-m-d H:i:', 'Europe/Paris') : '' }}</td>
+                <td> <span class="text-success">Début du rendez vous :</span> Le {{ appointment.start ? appointment.start|date('d-m-Y à H:i', 'Europe/Paris') : '' }}</td>
+                <td> <span class="text-danger">Fin du rendez vous :</span> Le {{ appointment.end ? appointment.end|date('d-m-Y à H:i', 'Europe/Paris') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_appointment_show', {'id': appointment.id}) }}">show</a>
-                    <a href="{{ path('app_appointment_edit', {'id': appointment.id}) }}">edit</a>
+                    <a class="btn btn-outline-primary" href="{{ path('app_appointment_show', {'id': appointment.id}) }}">Plus de détails</a>
+                    <a class="btn btn-outline-warning" href="{{ path('app_appointment_edit', {'id': appointment.id}) }}">Modifier votre rendez vous </a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +45,6 @@
         </tbody>
     </table>
 
+</div>
     {# <a href="{{ path('app_appointment_new') }}">Create new</a> #}
 {% endblock %}

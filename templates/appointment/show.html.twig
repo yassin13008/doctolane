@@ -3,32 +3,51 @@
 {% block title %}Appointment{% endblock %}
 
 {% block body %}
-    <h1>Appointment</h1>
+
+<div class="container d-flex flex-column justify-content-around ">
+<div class="card mt-4">
+  <div class="card-body">
+    <h5 class="card-title">Profil du Patient </h5>
+    <h6 class="card-subtitle mb-2 text-muted">Ici vous verrez les données de l'utilisateur</h6>
+    <p class="card-text">Nom : {{appointment.patient.first().lastname }}</p>
+    <p class="card-text">Prenom : {{appointment.patient.first().firstname }}</p>
+    <p class="card-text">Adresse : {{appointment.patient.first().adress }}</p>
+    <p class="card-text">Code Postal : {{appointment.patient.first().postalCode }}</p>
+    <p class="card-text">Ville : {{appointment.patient.first().city }}</p>
+    <p class="card-text">Numéro de téléphone : {{appointment.patient.first().phoneNumber}}</p>
+    <p class="card-text">Email : {{appointment.patient.first().email }}</p>
+
+    <a href="#" class="btn btn-info">Envoyez un message ?!</a>
+  </div>
+</div>
+
+
+    <div class="container d-flex flex-column justify-content-around ">
+    <h1>Plus de détails sur le rendez vous en question </h1>
 
     <table class="table">
         <tbody>
+
             <tr>
-                <th>Id</th>
-                <td>{{ appointment.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
+                <th>Sujet du rendez vous ?</th>
                 <td>{{ appointment.Title }}</td>
             </tr>
             <tr>
-                <th>Start</th>
-                <td>{{ appointment.start ? appointment.start|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Début du rendez-vous </th>
+                <td>Le {{ appointment.start ? appointment.start|date('d-m-Y à H:i') : '' }} </td>
             </tr>
             <tr>
-                <th>End</th>
-                <td>{{ appointment.end ? appointment.end|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Fin du rendez-vous</th>
+                <td>Le {{ appointment.end ? appointment.end|date('d-m-Y à H:i') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_appointment_index') }}">back to list</a>
 
-    <a href="{{ path('app_appointment_edit', {'id': appointment.id}) }}">edit</a>
+    <a class="btn btn-warning col-4" href="{{ path('app_appointment_edit', {'id': appointment.id}) }}">Modification du rendez vous ! </a>
 
     {{ include('appointment/_delete_form.html.twig') }}
+    <a class="btn btn-success col-4" href="{{ path('app_appointment_index') }}">Retour à la liste de vos rendez vous </a>
+    </div>
+    </div>
 {% endblock %}

@@ -3,11 +3,44 @@
 {% block title %}Edit Appointment{% endblock %}
 
 {% block body %}
-    <h1>Edit Appointment</h1>
+
+<div class="container d-flex flex-column justify-content-around col-6">
+<h1 class="text-center mt-5">Votre calendrier de rendez vous </h1>
+<p>Ce calendrier corresponds à vos disponibilité</p>
+<p>Il vous servira de repère pour prévoir votre nouveau rendez vous </p>
+<div id="calendrier"></div>
+
+<div class="container d-flex flex-column justify-content-around ">
+    <h2>Modifiez la date et le sujet du rendez vous </h1>
 
     {{ include('appointment/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_appointment_index') }}">back to list</a>
+    <a class ="btn btn-outline-info col-4"href="{{ path('app_appointment_index') }}">back to list</a>
 
     {{ include('appointment/_delete_form.html.twig') }}
+
+</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    window.onload = ()=> {
+        let calendarElt = document.querySelector('#calendrier');
+
+        let calendar = new FullCalendar.Calendar(calendarElt, {
+            initialView: 'timeGridWeek',
+            locale: 'fr',
+            timeZone : 'Europe/Paris',
+            headerToolbar: {
+                start: 'prev, next today',
+                center: 'title',
+                end: 'dayGridMonth, timeGridWeek'
+            },
+            events: {{ data|raw}}
+        })
+
+        calendar.render();
+    }
+</script>
 {% endblock %}

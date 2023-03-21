@@ -20,16 +20,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AppointmentController extends AbstractController
 {
     #[Route('/', name: 'app_appointment_index', methods: ['GET'])]
-    public function index(AppointmentRepository $appointmentRepository): Response
+    public function index(AppointmentRepository $appointmentRepository, PatientsRepository $patientRepo): Response
     {
 
         $user = $this->getUser();
+        $patients = $patientRepo->findAll($user);
+
+        // dd($patients);
 
         // dd($user->getAppointments()->toArray());
 
 
         return $this->render('appointment/index.html.twig', [
             'appointments' => $user->getAppointments()->toArray() ,
+            'patients' => $patients
         ]);
     }
 
@@ -170,12 +174,98 @@ class AppointmentController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_appointment_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Appointment $appointment, AppointmentRepository $appointmentRepository): Response
+    public function edit($id, Request $request, Appointment $appointment, AppointmentRepository $appointmentRepository): Response
     {
+
+    // Affichage du calendrier 
+    $user = $this->getUser();
+    $patientId = $id; // Je récupère l'id du patient ici 
+
+    $appointments = $appointmentRepository->findByProfessionalId($user); // Je récupère tous les rdv par professionnel (calendrier)
+    $oldAppointmentStart = $appointmentRepository->find($patientId)->getStart(); // Ici je récupère l'ancien rendez vous pour le comparer au autres
+    $oldAppointmentEnd = $appointmentRepository->find($patientId)->getEnd(); // Ici je récupère l'ancien rendez vous pour le comparer au autres
+
+
+    $calendarDoctorEvents = $appointments; // Je les contients dans une autre variable car je vais boucler dessus 
+
+
+    //Je vais initialisé une variable a null en cas ou aucun rendez vous n'a été pris avec cette personne
+    $rdvs = [];
+
+    // Ici, je vais mettre les données que j'ai récupérer dans un tableau => cela va me servir à parser ses données en JSON pour les afficher avec Fullcalendar
+    foreach ($calendarDoctorEvents as $calendarDoctorEvent) {
+        # code...
+        
+
+        $rdvs[]= [
+            'id' => $calendarDoctorEvent->getId(),
+            'start' => $calendarDoctorEvent->getStart()->format('Y-m-d H:i'),
+            'end' => $calendarDoctorEvent->getEnd()->format('Y-m-d H:i'),
+        ];
+
+    }
+
+
+    // Maintenant que j'ai rentrés les rendez vous dans un tableau, je vais parser les données en JSON
+    $data = json_encode($rdvs);
+
+    // Création du formulaire
         $form = $this->createForm(AppointmentType::class, $appointment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $today = new DateTime(); // Je récupère ici la date du jour
+            $timeZone = new DateTimeZone('Europe/Paris'); // je récupère le timezone Europe
+
+            $debut = $form->getData()->getStart()->setTimeZone($timeZone); // Heure de début du rendez vous en fuseau europe
+            $fin =  $form->getData()->getEnd()->setTimeZone($timeZone);// Heure de fin du rendez vous en fuseau europe
+            //Maintenant, je vais comparer les dates necessaires
+            $diff = $debut->diff($fin); // Ici je récupère la différence entre l'heure de debut et de fin de rdv
+
+            //Je vais boucler avec les autres rdvs 
+            // Ici corresponds au rdv actuelle que l'on modifie, le contrôle s'effectuant en bas 
+            //Nous on cherches d'abord a trouver si la date corresponds au autre rdv pour eviter tout problème (même s'il a son calendrier en face des yeux)
+
+            for ($i=1; $i < sizeof($calendarDoctorEvents) ; $i++) { 
+            
+                // Si la date de début de rendez vous corresponds à une date de début de rdv déja inscrit dans la bdd
+                    if($calendarDoctorEvents[$i]->getStart()->setTimeZone($timeZone) == $calendarDoctorEvents[0]->getStart()->setTimeZone($timeZone)){
+    
+                        dump($calendarDoctorEvents[$i]->getStart());
+                        dump($calendarDoctorEvents);
+                        dd($oldAppointmentStart);
+                        $this->addFlash('danger', 'Il existe déja un rendez vous à cette effets ');
+                        return $this->redirectToRoute('app_appointment_edit',['id' => $patientId]);
+                    }
+                // Si la date de debut de rdv se trouve entre une date de debut et une date de fin d'un rendez vous enregistrer
+                    if($calendarDoctorEvents[$i]->getStart() < $calendarDoctorEvents[0]->getStart()->setTimeZone($timeZone) && $calendarDoctorEvents[0]->getStart()->setTimeZone($timeZone) < $calendarDoctorEvents[$i]->getEnd()){
+
+                        $this->addFlash('danger', 'Vous ne pouvez pas prendre de rendez vous 30 min après un rendez vous ');
+                        return $this->redirectToRoute('app_appointment_edit',['id' => $patientId]);
+                    }
+                }
+
+            // Si la date du nouveau rdv est dans un futur plus proche
+            if($debut <= $oldAppointmentStart->setTimeZone($timeZone) ){
+                $this->addFlash('danger', 'Votre nouveau rendez vous dois se situer à une date ultérieur à l\ancient');
+                return $this->redirectToRoute('app_appointment_edit',['id' => $patientId]);
+            }
+            //Si la date est inférieur à la date d'aujourd'hui 
+            if($debut < $today ){
+                $this->addFlash('danger', 'Votre rendez vous doit être dans le futur');
+                return $this->redirectToRoute('app_appointment_edit',['id' => $patientId]);
+            }
+            // Si la date du début est supérieur à la date de fin
+            if($debut > $fin ){
+                $this->addFlash('danger', 'Vous ne pouvez pas avoir une date de début superieur à la date de fin ');
+                return $this->redirectToRoute('app_appointment_edit',['id' => $patientId]);
+            }
+            //Si L'ecart entre le debut du rdv et la fin du rdv est sup à 1heures
+            if($diff->h > 1 || $diff->h == 1 && $diff->i > 0){
+                $this->addFlash('danger', 'Votre rendez vous ne peux dépasser plus d\'une heure ');
+                return $this->redirectToRoute('app_appointment_edit',['id' => $patientId]);
+            }
             $appointmentRepository->save($appointment, true);
 
             return $this->redirectToRoute('app_appointment_index', [], Response::HTTP_SEE_OTHER);
@@ -184,6 +274,7 @@ class AppointmentController extends AbstractController
         return $this->renderForm('appointment/edit.html.twig', [
             'appointment' => $appointment,
             'form' => $form,
+            'data' => $data
         ]);
     }
 
