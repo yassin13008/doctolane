@@ -127,6 +127,12 @@ class AppointmentController extends AbstractController
                     $this->addFlash('danger', 'Vous ne pouvez pas prendre de rendez vous 30 min après un rendez vous ');
                     return $this->redirectToRoute('newAppointment',['id' => $id]);
                 }
+            // Si le rendez vous se situe sur un autre rendez vous 
+                if($calendarDoctorEvents[$i]->getStart() > $debut && $fin > $calendarDoctorEvents[$i]->getStart() && $fin < $calendarDoctorEvents[$i]->getEnd()){
+
+                    $this->addFlash('danger', 'Entre le début et la fin de votre rendez vous, il ne doit pas avoir un rendez vous, recherchez un autre créneau disponible ');
+                    return $this->redirectToRoute('newAppointment',['id' => $id]);
+                }
             }
             // Si la date du début du rdv est inferieur à la date actuelle
             if($debut < $today ){

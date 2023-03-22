@@ -45,10 +45,10 @@ security:
         - { path: ^/profilePatient, roles: ROLE_USER }
         - { path: ^/app_professionnal_list, roles: ROLE_USER }
         - { path: ^/professionnal/appointment/new/, roles: ROLE_USER }
-        - { path: ^/professionnal/appointment/, roles: ROLE_DOCTEUR }
-        - { path: ^/professionnal/appointment/show/id, roles: ROLE_DOCTEUR }
-        - { path: ^/professionnal/appointment/id/edit, roles: ROLE_DOCTEUR }
-        - { path: ^/professionnal/appointment/id/, roles: ROLE_DOCTEUR }
+        - { path: ^/professionnal/appointment/, roles: ROLE_DOCTOR }
+        - { path: ^/professionnal/appointment/show/id, roles: ROLE_DOCTOR }
+        - { path: ^/professionnal/appointment/id/edit, roles: ROLE_DOCTOR }
+        - { path: ^/professionnal/appointment/id/, roles: ROLE_DOCTOR }
         - { path: ^/profileDoctor, roles: ROLE_DOCTOR }
 
 when@test:

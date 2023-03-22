@@ -33,4 +33,23 @@ class ProfessionnalListController extends AbstractController
             'specialities' => $proSpecialityLabel
         ]);
     }
+
+    #[Route('/professionnal/list/show/{id}', name: 'app_professionnal_show')]
+    public function show($id,ProfessionnalsRepository $proRepo, SpecialitiesRepository $speRepo): Response{
+
+        $professionnal = $proRepo->find($id);
+
+
+        $speciality= $speRepo->find($professionnal);
+        $speLabelPro = $speciality->getSpecialityLabel();
+
+
+
+
+        return $this->render('professionnal_list/show.html.twig', [
+            'controller_name' => 'ProfessionnalListController',
+            'professionnal' => $professionnal,
+            'speciality' => $speLabelPro
+        ]);
+    }
 }

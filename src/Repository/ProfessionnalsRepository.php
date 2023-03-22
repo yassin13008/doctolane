@@ -55,17 +55,44 @@ class ProfessionnalsRepository extends ServiceEntityRepository implements Passwo
 //    /**
 //     * @return Professionals[] Returns an array of Professionals objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+
+    // Requête qui permet de trouver un professionnel par sa ville ou code postal 
+   public function findByCodePostalOuVille($postalCodeOrCity): array
+   {
+       return $this->createQueryBuilder('p') // ici je selectionnes tout les données du professionnels
+       ->where('p.postalCode = :postalCodeOrCity OR p.city = :postalCodeOrCity') // la condition c'est soi par le code postal ou la ville
+       ->setParameter('postalCodeOrCity', $postalCodeOrCity) // en paramettre on mettra les données que l'utilisateur aura saisie 
+       ->getQuery()
+       ->getResult();
+   }
+
+   // Requete qui permet de trouver un professionnel par sa spécialité
+   public function findBySpeciality($specialityId): array
+   {
+       return $this->createQueryBuilder('p')
+       ->where('p.speciality = :specialityId')
+       ->setParameter('specialityId', $specialityId)
+       ->getQuery()
+       ->getResult();
+   }
+
+   // Requete qui permet de trouver un professionnel par sa spécialité et son code postal ou sa ville 
+   public function findBySpecialityAndCityPostalCode($spe, $cityPost){
+    return $this->createQueryBuilder('p')
+    ->where('p.speciality = :specialityId and p.postalCode = :postalCodeOrCity OR p.city = :postalCodeOrCity')
+    ->setParameters(['specialityId' => $spe,
+                    'postalCodeOrCity' => $cityPost
+    ])
+    ->getQuery()
+    ->getResult();
+   }
+
+// $professionals = $this->getDoctrine()->getRepository(Professionnals::class)
+// ->createQueryBuilder('p')
+// ->where('p.postal_code = :postalCodeOrCity OR p.city = :postalCodeOrCity')
+// ->setParameter('postalCodeOrCity', $postalCodeOrCity)
+// ->getQuery()
+// ->getResult();
 
 //    public function findOneBySomeField($value): ?Professionals
 //    {

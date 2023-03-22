@@ -1,0 +1,46 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="container d-flex flex-column col-4 mt-4">
+<div>
+    <div></div>
+    <h1>Rechercher un professionnel de santé</h1>
+
+    {{ form_start(form) }}
+    <p>Recherchez votre professionnel de santé par </p>
+    {{ form_row(form.postalCodeOrCity) }}
+    <p>Et/ou bien par la spécialités du professionnel</p>
+    {{ form_row(form.speciality) }}
+    {{ form_row(form.search) }}
+    {{ form_end(form) }}
+</div>
+
+
+
+
+
+<div>
+    {% if professionals|length == 0 and speciality|length != 0 or professionals|length != 0 and speciality|length == 0 %}
+    
+    <h1>Résultats de la recherche</h1>
+
+            {% for professional in professionals %}
+        <div class="card">
+                <div class="card-header"> Spécialité : {{ professional.speciality.getSpecialityLabel}} </div>
+            <div class="card-body">
+                <h5 class="card-title">Mr {{ professional.lastname }} {{ professional.firstname }}</h5>
+                <p class="card-text">Expertises : {{ professional.expertises}}</p>
+                <a href=" {{ path('app_professionnal_show', {id : professional.id}) }}" class="btn btn-info">En savoir plus </a>
+                <a href="{{ path('newAppointment', {id : professional.id}) }}" class="btn btn-success">Prendre rendez vous ?</a>
+            </div>
+        </div>
+            {% endfor %}
+        
+    {% elseif professionals == 0 and speciality|length == 0  %}
+        <p>Pas de résultat pour le moment...</p>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

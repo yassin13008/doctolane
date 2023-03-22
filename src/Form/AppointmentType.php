@@ -9,6 +9,7 @@ use App\Repository\AppointmentRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AppointmentType extends AbstractType
 {
@@ -16,7 +17,13 @@ class AppointmentType extends AbstractType
     {
 
         $builder
-            ->add('Title')
+            ->add('Title', TextType::class, [
+                'label' => 'Sujet du rendez vous (en quelques mots)',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => ' Remplissez ce champs'
+                ]
+            ])
 
             ->add('start', DateTimeType::class, [
                 'date_widget' => 'single_text',

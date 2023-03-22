@@ -5,26 +5,26 @@
 {% block body %}
 
 
-    <h1 class="text-center"> Liste des professionnels inscrits ✅</h1>
+    <h1 class="text-center"> Votre professionnel de santé en détail !✅</h1>
 
-    
-{% for professionnal in professionnals %}
 
     <div class="card container d-flex flex-column justify-content-around " style="width: 40rem;">
         <img src="..." class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title"> {{ professionnal.lastname}} {{ professionnal.firstname}}</h5>
-            <p class="card-text">Adresse : {{ professionnal.lastname}}</p>
-            <p class="card-text">Code postal:  {{ professionnal.lastname}}</p>
-            <p class="card-text">Ville : {{ professionnal.lastname}}</p>
+            <p class="card-text">Adresse : {{ professionnal.adress}}</p>
+            <p class="card-text">Code postal:  {{ professionnal.postalCode}}</p>
+            <p class="card-text">Ville : {{ professionnal.city}}</p>
+            <p class="card-text">E-mail : {{ professionnal.email}}</p>
+            <p class="card-text">Numéro de téléphone : {{ professionnal.phoneNumber}}</p>
             <p class="card-text">Spécialité : {{ professionnal.speciality.getSpecialityLabel}}</p>
             <p class="card-text">Expertise : {{ professionnal.expertises}}</p>
 
             <a href="{{ path('newAppointment', {id : professionnal.id}) }}" class="btn btn-outline-primary">Prendre rendez vous ?</a>
+            <a href="#" class="btn btn-outline-info">Envoyez un email ?</a>
         </div>
     </div>
 
-{% endfor %}
 
 
 {% endblock %}
