@@ -86,6 +86,8 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
     #[ORM\ManyToMany(targetEntity: Appointment::class, mappedBy: 'professionnal')]
     private Collection $appointments;
 
+
+
     public function __construct()
     {
         $this->appointments = new ArrayCollection();

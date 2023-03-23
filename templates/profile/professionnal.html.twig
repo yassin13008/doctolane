@@ -5,17 +5,17 @@
 {% block body %}
 
 <div class="card d-flex flex-column justify-content-around container " style="width: 18rem;">
-  <img src="..." class="card-img-top" alt="...">
+  <img src="..." class="card-img-top" alt="imageProfil">
   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Votre nom : {{ app.user.lastname}}</p>
-    <p class="card-text">Votre Prenom : {{ app.user.firstname}} </p>
-    <p class="card-text">Votre Adresse : {{ app.user.adress}}</p>
-    <p class="card-text">Votre Code Postal : {{ app.user.postalCode}} </p>
-    <p class="card-text">Votre Ville : {{ app.user.city}} </p>
-    <p class="card-text">Votre numéro de téléphone : {{ app.user.phoneNumber}} </p>
-    <p class="card-text">Votre spécialité  : {{ speciality }} </p>
-    <p class="card-text">Details du domaine d'expertise : {{ app.user.expertises}} </p>
+    <h5 class="card-title">Votre profil</h5>
+    <p class="card-text"><em>Votre nom : </em> <strong>{{ app.user.lastname}}</strong></p>
+    <p class="card-text"><em>Votre Prenom : </em> <strong>{{ app.user.firstname}}</strong> </p>
+    <p class="card-text"><em>Votre Adresse : </em> <strong>{{ app.user.adress}}</strong></p>
+    <p class="card-text"><em>Votre Code Postal : </em> <strong>{{ app.user.postalCode}}</strong> </p>
+    <p class="card-text"><em>Votre Ville : </em> <strong>{{ app.user.city}}</strong> </p>
+    <p class="card-text"><em>Votre numéro de téléphone : </em> <strong>{{ app.user.phoneNumber}}</strong> </p>
+    <p class="card-text"><em>Votre spécialité : </em> <strong>{{ speciality }}</strong> </p>
+    <p class="card-text"><em>Details du domaine d'expertise : </em> <strong>{{ app.user.expertises}}</strong></p>
     <a href=" {{path('editProfileProfessionnal')}}" class="btn btn-outline-warning">Modifier votre profil !</a>
     <a href=" {{ path('editProfessionnalPassword')}}" class="btn btn-outline-danger">Modifier votre mot de passe !</a>
     <a href=" {{ path('home')}}" class="btn btn-outline-primary ">Retour sur la page d'acceuil </a>
