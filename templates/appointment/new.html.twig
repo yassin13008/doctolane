@@ -21,12 +21,12 @@
 
 <div id="calendrier"></div>
 
-<div class="container d-flex flex-column col-6 mt-4">
+<div class="container d-flex flex-column col-6">
     <h2>Prenez donc rendez-vous </h1>
 
     {{ include('appointment/_form.html.twig') }}
 
-    <a class="btn btn-warning col-4" href="{{ path('app_professionnal_list') }}">Retours à la liste des docteurs ! </a>
+    <a class="btn btn-warning" href="{{ path('home') }}">Retour à la page d'acceuil</a>
 </div>
 </div>
 

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-const MAILER_DSN = 'smtp://d28f438df9bec1:d9a394ed657dfc@sandbox.smtp.mailtrap.io:2525?encryption=tls&auth_mode=login';
 
 use App\Form\ResetPassNewFormType;
 use Symfony\Component\Mime\Email;
@@ -63,8 +62,9 @@ class SecurityController extends AbstractController
         EntityManagerInterface $manager,
         MailerInterface $mailer): Response
     {
+        $dd = $_ENV['MAILER_DSN']; // mailer dsn ici
 
-        $transport = Transport::fromDsn(MAILER_DSN);
+        $transport = Transport::fromDsn($dd);
         $mailer = new Mailer($transport); 
 
 // Ici je crée le formulaire avec la class du formulaire requis et j'envoie la requête 

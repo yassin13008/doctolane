@@ -21,6 +21,7 @@
             <p class="card-text">Expertise : {{ professionnal.expertises}}</p>
 
             <a href="{{ path('newAppointment', {id : professionnal.id}) }}" class="btn btn-outline-primary">Prendre rendez vous ?</a>
+            <a href="{{ path('contactPro', {id : professionnal.id}) }}" class="btn btn-outline-info">Envoyez un email ?</a>
         </div>
     </div>
 

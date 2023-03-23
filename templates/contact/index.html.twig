@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+
+{% block body %}
+
+<div class="container d-flex flex-column col-4 mt-4">
+<div>
+    <div></div>
+    <h1>Envoyez votre message </h1>
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form)}}
+    <button type="Submit" class="btn btn-success">Envoyez votre message</button>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}
+

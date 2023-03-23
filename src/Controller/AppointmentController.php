@@ -238,9 +238,9 @@ class AppointmentController extends AbstractController
                 // Si la date de début de rendez vous corresponds à une date de début de rdv déja inscrit dans la bdd
                     if($calendarDoctorEvents[$i]->getStart()->setTimeZone($timeZone) == $calendarDoctorEvents[0]->getStart()->setTimeZone($timeZone)){
     
-                        dump($calendarDoctorEvents[$i]->getStart());
-                        dump($calendarDoctorEvents);
-                        dd($oldAppointmentStart);
+                        // dump($calendarDoctorEvents[$i]->getStart());
+                        // dump($calendarDoctorEvents);
+                        // dd($oldAppointmentStart);
                         $this->addFlash('danger', 'Il existe déja un rendez vous à cette effets ');
                         return $this->redirectToRoute('app_appointment_edit',['id' => $patientId]);
                     }
