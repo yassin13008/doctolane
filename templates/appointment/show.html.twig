@@ -8,6 +8,10 @@
 <div class="card mt-4">
   <div class="card-body">
     <h5 class="card-title">Profil du Patient </h5>
+
+    {% if appointment.patient.first == false %}
+    <p>Pas de patient enregister sur ce créneau</p>
+    {% else %}
     <h6 class="card-subtitle mb-2 text-muted">Ici vous verrez les données de l'utilisateur</h6>
     <p class="card-text">Nom : {{appointment.patient.first().lastname }}</p>
     <p class="card-text">Prenom : {{appointment.patient.first().firstname }}</p>
@@ -16,7 +20,7 @@
     <p class="card-text">Ville : {{appointment.patient.first().city }}</p>
     <p class="card-text">Numéro de téléphone : {{appointment.patient.first().phoneNumber}}</p>
     <p class="card-text">Email : {{appointment.patient.first().email }}</p>
-
+    {% endif %}
   </div>
 </div>
 
@@ -26,11 +30,14 @@
 
     <table class="table">
         <tbody>
-
+            {% if appointment.patient.first == false %}
+            <p>Aucun sujet n'a été donné</p>
+            {% else %}
             <tr>
                 <th>Sujet du rendez vous ?</th>
                 <td>{{ appointment.Title }}</td>
             </tr>
+            {% endif %}
             <tr>
                 <th>Début du rendez-vous </th>
                 <td>Le {{ appointment.start ? appointment.start|date('d-m-Y à H:i') : '' }} </td>

@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+Vos disponibilités
+{% endblock %}
+
+{% block body %}
+
+{% if app.user.aviability == null %}
+
+    <h1>Si nous n'avez pas de disponibilé renseignées</h1>
+    <p><strong>Attention : </strong>La mise en place de vos disponibilité va générer un nombre de rendez selon les informations que vous avez saisie  </br> 
+    Une fois celle-ci crée, lors de la modification, vous allez de nouveau générer de nouvelles disponibilités</br>
+    Vous pouvez rajouter un nouveau créneau en cas de besoin</p>
+    <a class="btn btn-primary" href=" {{ path('aviabilityNew')}}">Ajouter vos disponibilité</a>
+{% else %}
+
+<div class="container d-flex flex-column col-4 mt-4">
+
+    <h1>Vos disponibilité</h1>
+
+    <p>Disponibilité de départ : {{ app.user.aviability.getStartDate | date ('d-m-Y à H:i')}} </p>
+    <p>Disponibilité de fin : {{ app.user.aviability.getEndDate | date ('d-m-Y à H:i')}} </p>
+    <p>L'heure à laquelle vous voulez commencez : {{ app.user.aviability.getStartTime | date ('H:i')}} </p>
+    <p>L'heure à laquelle vous voulez finir : {{ app.user.aviability.getEndTime | date ('H:i')}} </p>
+    <p>Durée de vos rendez-vous :{{ app.user.aviability.getDurationDate}}  minutes</p>
+    <p>Délai entre vos rendez vous : {{ app.user.aviability.getGapDate}}  minutes</p>
+
+    <p><strong class='text-danger'>Attention : </strong>La mise en place de vos disponibilité à générer un nombre de rendez selon les informations que vous avez saisie </br>
+    Je vous conseille d'aller voir la page vos rendez vous </br> <a class="btn btn-outline-primary" href=" {{ path('app_appointment_index') }}">Vos rendez vous</a> </br>
+    Une fois celle-ci crée, lors de la modification, vous allez de nouveau générer de nouvelles disponibilités</br>
+    Vous pouvez rajouter un nouveau créneau en cas de besoin si vous ne voulez pas par la suite</p>
+    <a class="btn btn-warning" href="{{ path('aviabilityEdit')}}">Généré de nouvelles disponibilités</a>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

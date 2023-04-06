@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des professionnes {% endblock %}
+{% block title %}Votre professionnel de santé {% endblock %}
 
 {% block body %}
 
@@ -8,8 +8,8 @@
     <h1 class="text-center"> Votre professionnel de santé en détail !✅</h1>
 
 
-    <div class="card container d-flex flex-column justify-content-around " style="width: 40rem;">
-        <img src="..." class="card-img-top" alt="...">
+    <div class="card container d-flex flex-column justify-content-around " style="width: 30rem;">
+        <img src="https://img.freepik.com/vecteurs-premium/icone-medecin-avatar-blanc_136162-58.jpg?w=826" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title"> {{ professionnal.lastname}} {{ professionnal.firstname}}</h5>
             <p class="card-text">Adresse : {{ professionnal.adress}}</p>
@@ -19,10 +19,40 @@
             <p class="card-text">Numéro de téléphone : {{ professionnal.phoneNumber}}</p>
             <p class="card-text">Spécialité : {{ professionnal.speciality.getSpecialityLabel}}</p>
             <p class="card-text">Expertise : {{ professionnal.expertises}}</p>
-
-            <a href="{{ path('newAppointment', {id : professionnal.id}) }}" class="btn btn-outline-primary">Prendre rendez vous ?</a>
             <a href="{{ path('contactPro', {id : professionnal.id}) }}" class="btn btn-outline-info">Envoyez un email ?</a>
         </div>
+    </div>
+    <div class="card container d-flex flex-column justify-content-around " style="widtth: 30rem">
+
+        <h2>Les créneau disponible de votre praticien</h2>
+
+        {% for appointment in appointments.data %}
+
+        {% if appointment.isDispo == false %}
+        
+        <div class="card-body">
+
+
+            <p>Jour et heure du créneau  : Le {{ appointment.getStart | date('d-m-Y à H-i')}}</p>
+            <a class="btn btn-warning disabled" href="#">Ce créneau n'est plus disponible </a>
+
+        {% else %}
+        
+            
+            <p>Jour et heure du créneau  : {{ appointment.getStart | date('d-m-Y à H-i')}}</p>
+            <a class="btn btn-success col-2" href="{{ path('addAppointment', {id : appointment.id})}}">Prendre ce créneau ?</a>
+
+        {% endif %}
+        {% endfor %}
+
+        {% set path = 'show' %}
+        {% set pro = professionnal.id %}
+        {% set pages = appointments.pages %}
+        {% set currentPage = appointments.page %}
+
+        {% include "_partials/_pagination.html.twig" %}
+        </div>
+
     </div>
 
 

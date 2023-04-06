@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProfessionnalsRepository;
+use phpDocumentor\Reflection\Types\Nullable;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -86,7 +87,11 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
     #[ORM\ManyToMany(targetEntity: Appointment::class, mappedBy: 'professionnal')]
     private Collection $appointments;
 
+    #[ORM\Column(length: 255)]
+    private string $slug;
 
+    #[ORM\ManyToOne(inversedBy: 'aviabilityPro',)]
+    private ?Aviability $aviability = null;
 
     public function __construct()
     {
@@ -331,6 +336,29 @@ class Professionnals implements UserInterface, PasswordAuthenticatedUserInterfac
         if ($this->appointments->removeElement($appointment)) {
             $appointment->removeProfessionnal($this);
         }
+
+        return $this;
+    }
+
+    #[ORM\PrePersist] // Pour donner automatiquement la valeur slug à patient 
+    public function setSlugValue(): void
+    {
+        $this->slug = $this->lastname;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function getAviability(): ?Aviability
+    {
+        return $this->aviability;
+    }
+
+    public function setAviability(?Aviability $aviability): self
+    {
+        $this->aviability = $aviability;
 
         return $this;
     }

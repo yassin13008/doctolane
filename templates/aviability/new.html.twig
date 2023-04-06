@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+Nouvelles disponibilités
+{% endblock %}
+
+{% block body %}
+
+<div class="container d-flex flex-column col-4 mt-4">
+
+    <h1>Mettez vos disponibilités</h1>
+
+    {{ form_start(form)}}
+
+{# Fait attention, les attributs que j'ai rejouté à mon formulaire sont inscript en JSON TYPE #}
+{# Je le l'ai pas fait sur le email et user name car deja fait sur le fichier RegistrationType pour pas engorger la page twig #}
+    {{form_row(form.startDate)}}
+    {{form_row(form.endDate)}}
+    {{form_row(form.startTime)}}
+    {{form_row(form.endTime)}}
+    {{form_row(form.durationDate)}}
+    {{form_row(form.gapDate)}}
+
+
+    {{ form_widget(form)}}
+<button class="btn btn-outline-success">Confirmer vos disponibilités</button>
+    {{ form_end(form)}}
+
+</div>
+
+{% endblock %}

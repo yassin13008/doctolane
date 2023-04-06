@@ -6,6 +6,7 @@ use App\Entity\Appointment;
 use App\Entity\Professionnals;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -51,6 +52,41 @@ class AppointmentRepository extends ServiceEntityRepository
     
         return $qb->getQuery()->getResult(); // je recupère la requete et j'affiche le résultat
     }
+
+    public function paginateAppByPro(int $page,int  $professionalId, int $limit = 12): array{
+
+        $limit = abs($limit);
+
+        $result = [];
+
+        $qb = $this->createQueryBuilder('app'); // Ici je crée la requête avec l'alias app (raccourci appointment ) pour dire que c'est la table appointment
+        $qb->select('app') // ici du coup je selection ma table appointment (ne pas oublié que l'on app nommé a)
+           ->leftJoin('app.professionnal', 'pro') // ici je vais joins l'id au professionnel id de ma table professionnal que je vais dénommé pro (avec l'alias )
+           ->where('pro.id = :professionalId') // Ici la condition de ma jointure se fait lorsque l'id de ma table pro = l'id de la table professionnal
+           ->setParameter('professionalId', $professionalId) // Ici j'insère la valeur qui lui correspondra et lors de l'appel de ma fonction je mettrai l'id en param de la fct
+           ->setMaxResults($limit)
+           ->setFirstResult(($page * $limit) - $limit);
+
+        $paginator = new Paginator($qb);
+
+        $data = $paginator->getQuery()->getResult();
+
+        if(empty($data)){
+            return $result;
+        }
+
+        $pages = ceil($paginator->count() / $limit);
+
+        $result['data'] = $data;
+        $result['pages']= $pages;
+        $result['page']= $page;
+        $result['limit'] = $limit;
+
+        return $result;
+
+    }
+
+    
 //    /**
 //     * @return Appointment[] Returns an array of Appointment objects
 //     */

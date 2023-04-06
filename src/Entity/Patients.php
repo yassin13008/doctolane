@@ -75,8 +75,8 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Appointment::class, mappedBy: 'patient')]
     private Collection $appointments;
 
-    // #[ORM\Column(length: 255)]
-    // private string $slug;
+    #[ORM\Column(length: 255)]
+    private string $slug;
 
 
    
@@ -310,10 +310,16 @@ class Patients implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // #[ORM\PrePersist] // Pour donner automatiquement la valeur slug à patient 
-    // public function setSlugValue(): void
-    // {
-    //     $this->slug = $this->lastname;
-    // }
+    #[ORM\PrePersist] // Pour donner automatiquement la valeur slug à patient 
+    public function setSlugValue(): void
+    {
+        $this->slug = $this->lastname;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
 
 }

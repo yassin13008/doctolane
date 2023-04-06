@@ -24,7 +24,7 @@
           <a class="nav-link" href="{{ path('app_search_pro')}}">Recherchez votre professionnel de santé</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href=" {{ path('app_professionnal_list') }}">Liste des professionnel</a>
+          <a class="nav-link" href=" {{ path('app_professionnal_list_') }}">Liste des professionnel</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_logout')}}">Deconnexion</a>
@@ -34,7 +34,13 @@
           <a class="nav-link" href="{{ path('profileProfessionnal')}}">Votre profil</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="{{ path('aviability')}}">Vos disponibilités </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href=" {{ path('app_appointment_index') }}">Vos rendez vous</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href=" {{ path('newAppointment', {id : app.user.id}) }}">Créer un nouveau rendez vous </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_logout')}}">Deconnexion</a>

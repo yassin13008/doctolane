@@ -1,0 +1,48 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+Ajouts de nouvelles dispo
+{% endblock %}
+
+{% block body %}
+
+<div class="container d-flex flex-column col-4 mt-4">
+
+    <div>
+        <h2>Rappel de vos anciennes disponibilité</h2>
+
+            <p>Disponibilité de départ : {{ app.user.aviability.getStartDate | date ('d-m-Y à H:i')}} </br>
+            Disponibilité de fin : {{ app.user.aviability.getEndDate | date ('d-m-Y à H:i')}} </br>
+            L'heure à laquelle vous voulez commencez : {{ app.user.aviability.getStartTime | date ('H:i')}}</br>
+            L'heure à laquelle vous voulez finir : {{ app.user.aviability.getEndTime | date ('H:i')}}</br>
+            Durée de vos rendez-vous :{{ app.user.aviability.getDurationDate}}  minutes</br>
+            Délai entre vos rendez vous : {{ app.user.aviability.getGapDate}}  minutes</p>
+
+        <h3 class="text-warning">Remarque : </h3>
+        <p>Vos disponibilité doivent être posterieur à vos anciennes disponibilité. </p>
+        <p>Mettre de nouvelles disponibilité va vous faire générer de nouveau créneaux selon les infos que vous avez renseignées mais aussi d'éditer vos disponibilité</br>
+        <span class="text-danger">Pour rappel :</span></br> si vous voulez bloquer un créneau, il suffira d'en rajouter un et de le décochez la case disponible </p>
+
+    </div>
+
+    <h2>Mettez vos disponibilités</h1>
+
+    {{ form_start(form)}}
+
+{# Fait attention, les attributs que j'ai rejouté à mon formulaire sont inscript en JSON TYPE #}
+{# Je le l'ai pas fait sur le email et user name car deja fait sur le fichier RegistrationType pour pas engorger la page twig #}
+    {{form_row(form.startDate)}}
+    {{form_row(form.endDate)}}
+    {{form_row(form.startTime)}}
+    {{form_row(form.endTime)}}
+    {{form_row(form.durationDate)}}
+    {{form_row(form.gapDate)}}
+
+
+    {{ form_widget(form)}}
+<button class="btn btn-outline-success">Confirmer vos disponibilités</button>
+    {{ form_end(form)}}
+
+</div>
+
+{% endblock %}

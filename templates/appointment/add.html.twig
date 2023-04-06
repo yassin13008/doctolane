@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prise de rendez vous{% endblock %}
+
+
+{% block body %}
+
+<div class="container d-flex flex-column col-4 mt-4">
+<div>
+    <div></div>
+    <h1>Réserver ce créneau </h1>
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form)}}
+    <button type="Submit" class="btn btn-success">Réserver</button>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}

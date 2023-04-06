@@ -10,8 +10,8 @@
     
 {% for professionnal in professionnals %}
 
-    <div class="card container d-flex flex-column justify-content-around " style="width: 40rem;">
-        <img src="..." class="card-img-top" alt="...">
+    <div class="card container d-flex flex-column justify-content-around mt-2" style="width: 30rem;">
+        <img src="https://img.freepik.com/vecteurs-premium/icone-medecin-avatar-blanc_136162-58.jpg?w=826" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title"> {{ professionnal.lastname}} {{ professionnal.firstname}}</h5>
             <p class="card-text">Adresse : {{ professionnal.lastname}}</p>
@@ -20,8 +20,8 @@
             <p class="card-text">Spécialité : {{ professionnal.speciality.getSpecialityLabel}}</p>
             <p class="card-text">Expertise : {{ professionnal.expertises}}</p>
 
-            <a href="{{ path('newAppointment', {id : professionnal.id}) }}" class="btn btn-outline-primary">Prendre rendez vous ?</a>
-            <a href="{{ path('contactPro', {id : professionnal.id}) }}" class="btn btn-outline-info">Envoyez un email ?</a>
+            <a href=" {{ path('show', {id : professionnal.id}) }}" class="btn btn-primary">En savoir plus </a>
+            <a href="{{ path('contactPro', {id : professionnal.id}) }}" class="btn btn-info">Envoyez un email ?</a>
         </div>
     </div>
 

@@ -3,15 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Professionnals;
+use App\Repository\AppointmentRepository;
 use App\Repository\ProfessionnalsRepository;
 use App\Repository\SpecialitiesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProfessionnalListController extends AbstractController
 {
-    #[Route('/professionnal/list', name: 'app_professionnal_list')]
+    #[Route('/professionnal/list', name: 'app_professionnal_list_')]
     public function index(ProfessionnalsRepository $professionnalsRepo, SpecialitiesRepository $specialitiesRepo): Response
     {
 
@@ -34,8 +36,8 @@ class ProfessionnalListController extends AbstractController
         ]);
     }
 
-    #[Route('/professionnal/list/show/{id}', name: 'app_professionnal_show')]
-    public function show($id,ProfessionnalsRepository $proRepo, SpecialitiesRepository $speRepo): Response{
+    #[Route('/professionnal/list/show/{id}', name: 'show')]
+    public function show($id,ProfessionnalsRepository $proRepo, SpecialitiesRepository $speRepo, AppointmentRepository $appRepo,Request $request): Response{
 
         $professionnal = $proRepo->find($id);
 
@@ -43,13 +45,21 @@ class ProfessionnalListController extends AbstractController
         $speciality= $speRepo->find($professionnal);
         $speLabelPro = $speciality->getSpecialityLabel();
 
+        $page = $request->query->getInt('page', 1);
+
+        $appointments = $appRepo->paginateAppByPro($page, $id);
+
+
+
+
 
 
 
         return $this->render('professionnal_list/show.html.twig', [
             'controller_name' => 'ProfessionnalListController',
             'professionnal' => $professionnal,
-            'speciality' => $speLabelPro
+            'speciality' => $speLabelPro,
+            'appointments' => $appointments
         ]);
     }
 }

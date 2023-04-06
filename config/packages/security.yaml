@@ -44,7 +44,8 @@ security:
         # - { path: ^/, roles: ROLE_USER }
         - { path: ^/profilePatient, roles: ROLE_USER }
         - { path: ^/app_professionnal_list, roles: ROLE_USER }
-        - { path: ^/professionnal/appointment/new/, roles: ROLE_USER }
+        - { path: ^/professionnal/appointment/new/, roles: [ROLE_DOCTOR] }
+        - { path: ^/professionnal/appointment/add/, roles: [ROLE_USER] }
         - { path: ^/professionnal/appointment/, roles: ROLE_DOCTOR }
         - { path: ^/professionnal/appointment/show/id, roles: ROLE_DOCTOR }
         - { path: ^/professionnal/appointment/id/edit, roles: ROLE_DOCTOR }

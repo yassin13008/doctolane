@@ -11,7 +11,20 @@
 <div id="calendrier"></div>
 
 <div class="container d-flex flex-column justify-content-around ">
+    <h3>ATTENTION :</h3>
+    <p>La modification des heures de rendez vous respecte certaines règles </br>
+    Nous vous avons mis un calendrier pour que vous puissiez voir vos créneaux afficher </br>
+    Si vous modifiez la date et l'heure de rendez vous, la date doit se situer <strong class="text-danger"> après le dernier rendez vous généré par vos disponibilités. </strong> </br>
+    La date de votre rendez vous doit toujours être après la dernière date de votre rendez-vous</br>
+    <strong class="text-danger">ATTENTION : </strong> En décochant la disponibilité, vous rendez le rendez-vous indisponible </br>
+    <strong class="text-warning">INFOS :</strong>Lorsqu'un client prends ce créneaux, il devient automatique indisponible
+    Si vous voulez crée un nouveau rendez vous, cliquer juste ici <a class="nav-link btn btn-outline-primary" href=" {{ path('newAppointment', {id : app.user.id}) }}">Créer un nouveau rendez vous </a></br>
+    </p>
+</div>
+
+<div class="container d-flex flex-column justify-content-around ">
     <h2>Modifiez la date et le sujet du rendez vous </h1>
+
 
     {{ include('appointment/_form.html.twig', {'button_label': 'Mise à jour'}) }}
 

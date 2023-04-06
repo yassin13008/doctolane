@@ -37,6 +37,9 @@ class Appointment
     #[ORM\ManyToMany(targetEntity: Professionnals::class, inversedBy: 'appointments')]
     private Collection $professionnal;
 
+    #[ORM\Column]
+    private ?bool $isDispo = true;
+
     public function __construct()
     {
         $this->patient = new ArrayCollection();
@@ -130,6 +133,18 @@ class Appointment
     public function removeProfessionnal(Professionnals $professionnal): self
     {
         $this->professionnal->removeElement($professionnal);
+
+        return $this;
+    }
+
+    public function isIsDispo(): ?bool
+    {
+        return $this->isDispo;
+    }
+
+    public function setIsDispo(bool $isDispo): self
+    {
+        $this->isDispo = $isDispo;
 
         return $this;
     }

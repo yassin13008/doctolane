@@ -45,6 +45,8 @@ class RegistrationController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+
+            $userPatient->setSlugValue(); // Je vais rajouter le slug ici 
             
 
             $entityManager->persist($userPatient);
@@ -78,6 +80,7 @@ class RegistrationController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+            $userProfessionnals->setSlugValue(); // Je vais rajouter le slug ici 
 
             $entityManager->persist($userProfessionnals);
             $entityManager->flush();

@@ -8,27 +8,35 @@
 
 <div class="container">
     <h1>Vos rendez vous</h1>
-    <p>Vous retrouvez ici la liste des patients qui souhaite vous voir. </p>
-    <p>Vous vous pouvez à tous moments voir le détais du patient, modifier ou supprimer le rendez vous en question. </p>
+    <p>Vous retrouvez ici la liste des patients qui souhaite prendre rendez vous avec vous </br>
+    Vous vous pouvez à tous moments voir le détais du patient, modifier ou supprimer le rendez vous en question. </br>
+    <strong class="text-info">Remarque : </strong>Si le nom et le prénom ne sont pas inscrit, c'est que personne n'a encore pris ce créneaux </p>
 
     <table class="table">
         <thead class="bg-info">
             <tr>
                 <th scope="col">Nom</th>
                 <th scope="col">Prenom</th>
-                <th scope="col">Title</th>
-                <th scope="col">Start</th>
-                <th scope="col">End</th>
-                <th scope="col">actions</th>
+                <th scope="col">Objet</th>
+                <th scope="col">Début</th>
+                <th scope="col">Fin</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
 
 
+
         {% for appointment in appointments %}
             <tr>
+
+            {% if appointment.patient.first == false %}
+            <td>Aucun patient n'a pris ce créneax</td>
+            <td>Aucun patient n'a pris ce créneax</td>
+            {% else %}
                 <td>{{ appointment.patient.first().lastname }}</td>
                 <td>{{ appointment.patient.first().firstname }}</td>
+            {% endif %}
                 <td>{{ appointment.Title }}</td>
                 <td> <span class="text-success">Début du rendez vous :</span> Le {{ appointment.start ? appointment.start|date('d-m-Y à H:i', 'Europe/Paris') : '' }}</td>
                 <td> <span class="text-danger">Fin du rendez vous :</span> Le {{ appointment.end ? appointment.end|date('d-m-Y à H:i', 'Europe/Paris') : '' }}</td>

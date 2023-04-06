@@ -75,6 +75,15 @@ class ProfessionnalsRepository extends ServiceEntityRepository implements Passwo
        ->getQuery()
        ->getResult();
    }
+   // Requete de retrouver un professionnel par son slug 
+   public function findBySlug($slug): array
+   {
+       return $this->createQueryBuilder('p')
+       ->where('p.slug = :slug')
+       ->setParameter('slug', $slug)
+       ->getQuery()
+       ->getResult();
+   }
 
    // Requete qui permet de trouver un professionnel par sa spécialité et son code postal ou sa ville 
    public function findBySpecialityAndCityPostalCode($spe, $cityPost){
