@@ -23,47 +23,50 @@ class AppointmentController extends AbstractController
     // LISTE DE TOUS LES RENDEZ VOUS
 {
     #[Route('/', name: 'app_appointment_index', methods: ['GET'])]
-    public function index(AppointmentRepository $appointmentRepository, PatientsRepository $patientRepo): Response
+    public function index(AppointmentRepository $appRepo, PatientsRepository $patientRepo, Request $request): Response
     {
 
-        $user = $this->getUser();
-        $patients = $patientRepo->findAll($user);
+        $user = $this->getUser(); // Ici je récupère les données de l'utilisateur connecté à savoir le professionnel de santé en question 
+        $page = $request->query->getInt('page', 1); // Je récupère la premier page pour ma recherche sql
 
-        // dd($patients);
+        $appointments = $appRepo->paginateAppByPro($page, $user->getId()); // Ici je récupère les résultats de ma requête de pagination 
+        // Je récupère les 11 premiers rendez -vous de ce professionnel de santé et quand on changera de page, il y aura les 11 suivant et ainsi de suite 
 
-        // dd($user->getAppointments()->toArray());
+
+
+
 
 
         return $this->render('appointment/index.html.twig', [
-            'appointments' => $user->getAppointments()->toArray() ,
-            'patients' => $patients
+            'appointments' => $appointments,
         ]);
     }
     // AJOUT D'UN CRENEAU AU PATIENT
     #[Route('/add/{id}', name: 'addAppointment', methods: ['GET', 'POST'])]
     public function add($id, Request $request,AppointmentRepository $appointmentRepository , EntityManagerInterface $manager): Response
     {
-        $appointment = $appointmentRepository->find($id);
+        $appointment = $appointmentRepository->find($id); // Ici je récupère le créneau en question 
 
-        $form = $this->createForm(SubjectType::class);
+        $form = $this->createForm(SubjectType::class); // Formulaire qui va me permettre de rajouter le title sur le rendez vous (appointment) selectionnée par l'utilisateur
 
         // Apres je prépare la request 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $subject = $form->getData()['Title'];
+            $subject = $form->getData()['Title']; // Si le champs est soumis et valide je récupère la donnée title 
 
-            $appointment->setTitle($subject);
-            $appointment->setIsDispo(false);
+            $appointment->addPatient($this->getUser()); // Ici je rajoute le patient au rendez vous 
+            $appointment->setTitle($subject); // Je rajoute le titre au rendez-vous 
+            $appointment->setIsDispo(false); // Et je rends ce créneau indisponible 
 
-            $appointmentRepository->save($appointment, true);
+            $appointmentRepository->save($appointment, true); // Je sauvegarde les informations du créneau séléctionner par l'utilisateur (le patiient)
 
-            $this->addFlash('success', 'Votre créneau à été réservé');
+            $this->addFlash('success', 'Votre créneau à été réservé'); // Je fais une redirection à l'acceuil avec un message de réussite 
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
-        // dd($appointment);
+
 
         return $this->render('appointment/add.html.twig', [
             'appointment' => $appointment,
@@ -71,24 +74,20 @@ class AppointmentController extends AbstractController
         ]);
     }
 
-    // $appointmentRepository->find($user->getAppointments()->toArray()
 
     // ROUTE DE LA CREATION D'UN RENDEZ VOUS POUR LES DOCTEUR 
     #[Route('/new/{id}', name: 'newAppointment', methods: ['GET', 'POST'])]
     public function new($id, Request $request, AppointmentRepository $appointmentRepository, PatientsRepository $patientRepo, ProfessionnalsRepository $proRepo, EntityManagerInterface $manager): Response
     {
-        // Récupération du calendrier et transformation des disponibilités du professionnel de santé 
-        // On récupère tous les rendez-vous correspondant au professionnels de santé
-        // Recup le pro en question
 
-        // Voir la custom query
+        // Ici je récupère tous les créneaux du professionnel de santé 
         $appointments = $appointmentRepository->findByProfessionalId($id);
 
 
-        $calendarDoctorEvents = $appointments;
+        $calendarDoctorEvents = $appointments; // Et j'initialise la variable calendar pour renvoyez ses données en question en format JSON
 
 
-        //Je vais initialisé une variable a null en cas ou aucun rendez vous n'a été pris avec cette personne
+        //Je vais initialisé une variable a null en cas ou aucun rendez vous n'a été pris avec cette personne.
         $rdvs = [];
 
         // Ici, je vais mettre les données que j'ai récupérer dans un tableau => cela va me servir à parser ses données en JSON pour les afficher avec Fullcalendar
@@ -135,6 +134,8 @@ class AppointmentController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // ATTENTION : ICI j'ai instauré un délais d'une heure max entre les rendez vous pour ne pas bloquer un rendez vous d'une journée 
+
             // Si le formulaire est valides je vais récupérer les données de mon formulaires et effectuer des controlles avant de persister les données en BDD
             $today = new DateTime(); // Je récupère ici la date du jour
             $timeZone = new DateTimeZone('Europe/Paris'); // je récupère le timezone Europe
@@ -161,7 +162,7 @@ class AppointmentController extends AbstractController
                         return $this->redirectToRoute('newAppointment',['id' => $id]);
                     }
                 }
-            
+            //Si la date du début du rendez vous est inférier à la date et heure d'aujourduit 
             if($debut < $today ){
                     $this->addFlash('danger', 'Votre rendez vous doit être dans le futur');
                     return $this->redirectToRoute('newAppointment',['id' => $id]);

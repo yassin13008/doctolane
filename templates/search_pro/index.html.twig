@@ -32,7 +32,7 @@
             <div class="card-body">
                 <h5 class="card-title">Mr {{ professional.lastname }} {{ professional.firstname }}</h5>
                 <p class="card-text">Expertises : {{ professional.expertises}}</p>
-                <a href=" {{ path('app_professionnal_show', {id : professional.id}) }}" class="btn btn-info">En savoir plus </a>
+                <a href=" {{ path('show', {id : professional.id}) }}" class="btn btn-info">En savoir plus </a>
             </div>
         </div>
             {% endfor %}

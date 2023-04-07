@@ -27,7 +27,7 @@
 
 
 
-        {% for appointment in appointments %}
+        {% for appointment in appointments.data %}
             <tr>
 
             {% if appointment.patient.first == false %}
@@ -52,6 +52,14 @@
         {% endfor %}
         </tbody>
     </table>
+    
+    {# Mis en place de la pagination pour la page concerné  #}
+        {% set path = 'app_appointment_index' %}
+        {% set pro = app.user.getId %}
+        {% set pages = appointments.pages %}
+        {% set currentPage = appointments.page %}
+
+        {% include "_partials/_pagination.html.twig" %}
 
 </div>
     {# <a href="{{ path('app_appointment_new') }}">Create new</a> #}
