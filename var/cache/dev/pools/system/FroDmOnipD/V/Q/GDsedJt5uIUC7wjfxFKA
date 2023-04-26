@@ -1,0 +1,3 @@
+<?php //App%255CEntity%255CPatients%2523getResetToken
+
+return [PHP_INT_MAX, []];
